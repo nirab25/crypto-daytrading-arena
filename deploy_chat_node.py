@@ -50,7 +50,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--api-key",
         default=None,
-        help="API key for the provider (default: $OPENAI_API_KEY)",
+        help="API key for the provider (default: $OPENAI_API_KEY or $DEEPSEEK_API_KEY)",
     )
     parser.add_argument(
         "--bootstrap-servers",
@@ -74,11 +74,11 @@ def parse_args() -> argparse.Namespace:
 async def main() -> None:
     args = parse_args()
 
-    # Resolve API key: explicit flag > env var
-    api_key = args.api_key or os.getenv("OPENAI_API_KEY")
+    # Resolve API key: explicit flag > OPENAI_API_KEY > DEEPSEEK_API_KEY
+    api_key = args.api_key or os.getenv("OPENAI_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         print("ERROR: No API key provided.")
-        print("Pass --api-key or set OPENAI_API_KEY.")
+        print("Pass --api-key or set OPENAI_API_KEY / DEEPSEEK_API_KEY.")
         sys.exit(1)
 
     print("=" * 50)
